@@ -1,10 +1,16 @@
-import HomePage from "@/components/home";
 
+import ExpenseForm from '@/components/ExpenseForm'
+import ExpenseSummary from '@/components/ExpenseSummary'
+import SpendingLimitSetup from '@/components/SpendingLimitSetup'
 
 export default function Home() {
   return (
-    <>
-     <HomePage/>
-    </>
-  );
+    <main className="container">
+      <h1>Expense Tracker</h1>
+      <SpendingLimitSetup />
+      <ExpenseForm />
+      <ExpenseSummary />
+    </main>
+  )
 }
+

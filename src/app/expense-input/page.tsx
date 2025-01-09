@@ -1,4 +1,4 @@
-import ExpenseInput from '@/components/ExpenseInput';
+import ExpenseInput from '@/components/ExpenseForm';
 import React from 'react';
 
 const page = () => {
