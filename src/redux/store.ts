@@ -1,11 +1,12 @@
-import { configureStore } from '@reduxjs/toolkit'
-import expenseReducer from './expenseSlice'
+import { configureStore } from '@reduxjs/toolkit';
+import expenseReducer from './expenseSlice'; // Adjust the path to your reducer
 
-export const store = configureStore({
+const store = configureStore({
   reducer: {
     expenses: expenseReducer,
   },
-})
+});
 
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof store.getState>;
+export default store;

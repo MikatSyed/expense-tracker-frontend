@@ -44,12 +44,7 @@ export default function Main() {
       )}
 
     
-      {isLimitsUpdated && (
-        <>
-          <ExpenseForm />
-          
-        </>
-      )}
+    
 
     </main>
   )

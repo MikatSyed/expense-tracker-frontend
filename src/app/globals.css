@@ -15,7 +15,7 @@ body {
   color: var(--text-color);
   margin: 0;
   padding: 0;
-  background-color: var(--background-color);
+
 }
 
 .container {
@@ -29,8 +29,8 @@ body {
 
 h1, h2, h3 {
   color: var(--primary-color);
+  margin-bottom: 20px;
 }
-
 
 .modal-overlay {
   position: fixed;
@@ -43,27 +43,25 @@ h1, h2, h3 {
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  
 }
-
 
 .modal-container {
   background: var(--modal-background);
-  padding: 25px; 
-  border-radius: 12px; 
+  padding: 30px;
+  border-radius: 12px;
   width: 100%;
-  max-width: 550px; 
+  max-width: 550px;
   box-shadow: 0 6px 24px var(--shadow-color);
   display: flex;
   flex-direction: column;
-  gap: 5px; 
+  gap: 15px;
 }
-
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 20px;
 }
 
 .modal-header h2 {
@@ -80,17 +78,30 @@ h1, h2, h3 {
   color: var(--modal-header-color);
 }
 
-
 .expense-form {
+  background-color: white;
+  border-radius: 12px;
+  padding: 25px;
   display: flex;
   flex-direction: column;
-  gap: 10px; 
+  gap: 20px;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.expense-form h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--modal-header-color);
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 5px; 
+  gap: 10px;
 }
 
 label {
@@ -103,13 +114,12 @@ label {
 
 input, select {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 16px;
   box-sizing: border-box;
   background: #f9f9f9;
-
 }
 
 input:focus, select:focus {
@@ -118,10 +128,9 @@ input:focus, select:focus {
   box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
 }
 
-
 button {
   border: none;
-  padding: 12px;
+  padding: 15px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
@@ -147,19 +156,15 @@ button:disabled {
   background-color: rgba(194, 185, 185, 0.8);
 }
 
-
 .modal-actions {
   display: flex;
-  margin-top: 10px;
-  gap: 10px;
+  margin-top: 20px;
+  gap: 15px;
 }
 
 .btn-save {
   background-color: var(--btn-save-bg);
- 
 }
-
-
 
 .btn-cancel {
   background-color: var(--btn-cancel-bg);
@@ -170,80 +175,30 @@ button:disabled {
   background-color: #c0392b;
 }
 
-
-@media (max-width: 768px) {
-  .modal-container {
-    padding: 20px;
-    max-width: 90%; 
-  }
-
-  .form-group {
-    gap: 10px; 
-  }
-
-  .btn-save, .btn-cancel {
-    font-size: 14px;
-    padding: 10px;
-  }
-}
-
-.expense-form {
-  background-color: white; 
-  border-radius: 12px; 
-  padding: 20px; 
-  
+.expense-div {
   display: flex;
-  flex-direction: column;
-  gap: 15px; 
-  width: 500px; 
-  margin: 0 auto; 
-}
-
-
-.expense-form h2 {
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--modal-header-color);
+  width: 100%;
+  gap: 15px;
   margin-bottom: 20px;
-  text-align: center; 
 }
 
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.expense-div a {
+  flex: 1;
+  text-decoration: none;
 }
 
-input,
-select {
+.expense-div button {
   width: 100%;
-  padding: 10px; 
-  border: 1px solid #ddd;
-  border-radius: 8px; 
+  padding: 15px;
   font-size: 16px;
-  box-sizing: border-box;
-  background-color: #f9f9f9; 
-}
-
-
-.expense-form button {
-  width: 100%;
-  padding: 14px;
-  background-color: var(--btn-save-bg); 
-  border-radius: 8px;
-  font-size: 16px;
+  text-align: center;
+  border: none;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  background-color: var(--primary-color);
 }
-
-.expense-form button:hover {
-  background-color: rgb(170, 168, 168);
-}
-
 
 .expense-summary {
-  padding: 20px;
+  padding: 25px;
   background-color: white;
   border-radius: 12px;
   max-width: 100%;
@@ -264,7 +219,7 @@ select {
 
 .expense-table th, .expense-table td {
   border: 1px solid #ddd;
-  padding: 10px;
+  padding: 12px;
   text-align: center;
   font-size: 14px;
 }
@@ -283,3 +238,20 @@ select {
   background-color: #f2f2f2;
 }
 
+
+
+@media (max-width: 768px) {
+  .modal-container {
+    padding: 20px;
+    max-width: 90%;
+  }
+
+  .form-group {
+    gap: 10px;
+  }
+
+  .btn-save, .btn-cancel {
+    font-size: 14px;
+    padding: 10px;
+  }
+}

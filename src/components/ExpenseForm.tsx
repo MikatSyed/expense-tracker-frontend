@@ -104,7 +104,10 @@ export default function ExpenseForm() {
         />
       </div>
       <button type="submit">Add Expense</button>
-    <Link href="/summary">  <button type="button">Summary</button></Link>
+   <div className='expense-div'>
+   <Link href="/expenses">  <button type="button">View Expenses</button></Link>
+   <Link href="/summary">  <button type="button">Summary</button></Link>
+   </div>
     </form>
 
     

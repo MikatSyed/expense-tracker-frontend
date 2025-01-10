@@ -5,10 +5,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-hot-toast'
 import { setLimits } from '@/redux/expenseSlice'
 import { RootState } from '@/redux/store'
+import { useRouter } from 'next/navigation'
 
 const categories = ['Groceries', 'Transportation', 'Healthcare', 'Utility', 'Charity', 'Miscellaneous']
 
 export default function SpendingLimitSetup({ onClose, onLimitsUpdated }: { onClose: () => void, onLimitsUpdated: () => void }) {
+  const {push} = useRouter()
   const dispatch = useDispatch()
   const currentLimits = useSelector((state: RootState) => state.expenses.limits)
 
@@ -34,6 +36,7 @@ export default function SpendingLimitSetup({ onClose, onLimitsUpdated }: { onClo
     dispatch(setLimits(limits))
     onLimitsUpdated()
     onClose()
+    push('/add-expense')
   }
 
   return (
