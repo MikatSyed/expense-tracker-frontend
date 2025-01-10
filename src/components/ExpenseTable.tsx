@@ -8,7 +8,7 @@ import {
   updateExpenseAsync,
 } from "@/redux/expenseSlice";
 import { useAppDispatch } from "@/redux/hooks/useAppDispatch";
-import { FiEdit, FiTrash } from "react-icons/fi"; // Import React Icons
+import { FiEdit, FiTrash } from "react-icons/fi"; 
 
 const ExpenseTable: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -36,6 +36,20 @@ const ExpenseTable: React.FC = () => {
     return <div className="error-message">Error: {error}</div>;
   }
 
+  function handleDelete(id: string | undefined) {
+    if (id) {
+      dispatch(deleteExpenseAsync(id));
+    }
+  }
+
+  function handleEditSubmit() {
+    if (editingExpense) {
+      const { _id, ...updates } = editingExpense;
+      dispatch(updateExpenseAsync({ id: _id, updates }));
+      setEditingExpense(null);
+    }
+  }
+
   return (
     <div className="expense-summary">
       <h2>Expenses List</h2>
@@ -61,10 +75,10 @@ const ExpenseTable: React.FC = () => {
                   style={{ marginRight: "10px" }}
                   onClick={() => setEditingExpense(expense)}
                 >
-                  <FiEdit size={16} /> {/* Edit Icon */}
+                  <FiEdit size={16} />
                 </button>
                 <button onClick={() => handleDelete(expense._id)}>
-                  <FiTrash size={16} /> {/* Delete Icon */}
+                  <FiTrash size={16} /> 
                 </button>
               </td>
             </tr>
@@ -72,7 +86,7 @@ const ExpenseTable: React.FC = () => {
         </tbody>
       </table>
 
-      {/* Edit Modal */}
+   
       {editingExpense && (
         <div className="modal-overlay">
           <div className="modal-container">
@@ -135,19 +149,7 @@ const ExpenseTable: React.FC = () => {
     </div>
   );
 
-  function handleDelete(id: string | undefined) {
-    if (id) {
-      dispatch(deleteExpenseAsync(id));
-    }
-  }
 
-  function handleEditSubmit() {
-    if (editingExpense) {
-      const { _id, ...updates } = editingExpense;
-      dispatch(updateExpenseAsync({ id: _id, updates }));
-      setEditingExpense(null);
-    }
-  }
 };
 
 export default ExpenseTable;
