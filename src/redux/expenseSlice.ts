@@ -77,7 +77,7 @@ export const fetchExpenses = createAsyncThunk<Expense[], void, { rejectValue: st
   'expenses/fetchExpenses',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch('http://localhost:8880/api/v1/expenses');
+      const response = await fetch('https://expense-tracker-backend-ashy.vercel.app/api/v1/expenses');
       if (!response.ok) {
         throw new Error('Failed to fetch expenses');
       }
@@ -94,7 +94,7 @@ export const addExpenseAsync = createAsyncThunk<Expense, Omit<Expense, '_id'>, {
   'expenses/addExpense',
   async (expense, { rejectWithValue, dispatch }) => {
     try {
-      const response = await fetch('http://localhost:8880/api/v1/expenses', {
+      const response = await fetch('https://expense-tracker-backend-ashy.vercel.app/api/v1/expenses', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -124,7 +124,7 @@ export const updateExpenseAsync = createAsyncThunk<
   'expenses/updateExpense',
   async ({ id, updates }, { rejectWithValue, dispatch }) => {
     try {
-      const response = await fetch(`http://localhost:8880/api/v1/expenses/${id}`, {
+      const response = await fetch(`https://expense-tracker-backend-ashy.vercel.app/api/v1/expenses/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -154,7 +154,7 @@ export const deleteExpenseAsync = createAsyncThunk<
   'expenses/deleteExpense',
   async (id, { rejectWithValue, dispatch }) => {
     try {
-      const response = await fetch(`http://localhost:8880/api/v1/expenses/${id}`, {
+      const response = await fetch(`https://expense-tracker-backend-ashy.vercel.app/api/v1/expenses/${id}`, {
         method: 'DELETE',
       });
       if (!response.ok) {
