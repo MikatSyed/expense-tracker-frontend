@@ -97,7 +97,7 @@ const ExpenseTable: React.FC = () => {
                 handleEditSubmit();
               }}
             >
-              <label>
+              <label className="expense-level">
                 Category:
                 <input
                   type="text"
@@ -110,7 +110,7 @@ const ExpenseTable: React.FC = () => {
                   }
                 />
               </label>
-              <label>
+              <label className="expense-label">
                 Purpose:
                 <input
                   type="text"
@@ -123,7 +123,8 @@ const ExpenseTable: React.FC = () => {
                   }
                 />
               </label>
-              <label>
+             
+              <label className="expense-level">
                 Amount:
                 <input
                   type="number"
