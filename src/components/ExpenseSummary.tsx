@@ -3,7 +3,11 @@
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState, AppDispatch } from '@/redux/store'
-import { fetchExpenses, addExpenseAsync } from '@/redux/expenseSlice'
+import { fetchExpenses } from '@/redux/expenseSlice'
+import { Tooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
+
+const categories = ['Groceries', 'Transportation', 'Healthcare', 'Utility', 'Charity', 'Miscellaneous']
 
 export default function ExpenseSummary() {
   const dispatch = useDispatch<AppDispatch>()
@@ -15,17 +19,6 @@ export default function ExpenseSummary() {
     }
   }, [dispatch, status])
 
-  const handleAddExpense = () => {
-    // Example of adding a new expense
-    const newExpense = {
-      amount: 150,
-      category: 'Entertainment',
-      purpose: 'Movie night',
-      date: new Date().toISOString(),
-    }
-    dispatch(addExpenseAsync(newExpense))
-  }
-
   if (error) {
     return <div>Error: {error}</div>
   }
@@ -34,59 +27,78 @@ export default function ExpenseSummary() {
     return <div>Loading...</div>
   }
 
-  // Group expenses by date and then by category
+  // Group expenses by date
   const groupedByDate = expenses.reduce((acc, expense) => {
     const date = new Date(expense.date).toLocaleDateString()
     if (!acc[date]) {
       acc[date] = {}
     }
     if (!acc[date][expense.category]) {
-      acc[date][expense.category] = { total: 0, items: [] }
+      acc[date][expense.category] = []
     }
-    acc[date][expense.category].total += expense.amount
-    acc[date][expense.category].items.push(expense)
+    acc[date][expense.category].push(expense)
     return acc
-  }, {} as Record<string, Record<string, { total: number; items: typeof expenses }>>)
+  }, {} as Record<string, Record<string, { amount: number; purpose: string }[]>>)
+
+  // Calculate category totals
+  const categoryTotals = categories.reduce((totals, category) => {
+    totals[category] = expenses
+      .filter((expense) => expense.category === category)
+      .reduce((sum, exp) => sum + exp.amount, 0)
+    return totals
+  }, {} as Record<string, number>)
 
   return (
     <div className="expense-summary">
       <h2>Expense Summary</h2>
-      <button onClick={handleAddExpense}>Add Example Expense</button>
-      {Object.entries(groupedByDate).map(([date, categories]) => (
-        <div key={date} className="day-summary">
-          <h3>{date}</h3>
-          {Object.entries(categories).map(([category, data]) => (
-            <div key={category} className="category-summary">
-              <h4>{category}</h4>
-              <table className="expense-table">
-                <thead>
-                  <tr>
-                    <th>Amount ($)</th>
-                    <th>Purpose</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.items.map((expense, index) => (
-                    <tr key={index}>
-                      <td>{expense.amount}</td>
-                      <td title={expense.purpose}>{expense.purpose}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <div className="category-total">
-                <strong>Total for {category}: ${data.total}</strong>
-              </div>
-            </div>
+
+      <table className="expense-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            {categories.map((category) => (
+              <th key={category}>{category}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {Object.entries(groupedByDate).map(([date, categoryData]) => (
+            <tr key={date}>
+              <td>{date}</td>
+              {categories.map((category) => (
+                <td key={category}>
+                  {categoryData[category] ? (
+                    categoryData[category].map((expense, idx) => (
+                      <div
+                        key={idx}
+                        data-tooltip-id={`tooltip-${date}-${category}-${idx}`}
+                        data-tooltip-content={`Purpose: ${expense.purpose}, Amount: $${expense.amount.toFixed(2)}`}
+                      >
+                        ${expense.amount.toFixed(2)}
+                        <Tooltip id={`tooltip-${date}-${category}-${idx}`} />
+                      </div>
+                    ))
+                  ) : (
+                    'x'
+                  )}
+                </td>
+              ))}
+            </tr>
           ))}
-          <div className="day-total">
-            <strong>
-              Daily Total: $
-              {Object.values(categories).reduce((sum, categoryData) => sum + categoryData.total, 0)}
-            </strong>
-          </div>
-        </div>
-      ))}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>
+              <strong>Total</strong>
+            </td>
+            {categories.map((category) => (
+              <td key={category}>
+                <strong>{categoryTotals[category] || '-'}</strong>
+              </td>
+            ))}
+          </tr>
+        </tfoot>
+      </table>
     </div>
   )
 }

@@ -5,6 +5,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addExpenseAsync } from '@/redux/expenseSlice'
 import { AppDispatch, RootState } from '@/redux/store'
 import { getCategoryTotals } from '@/utility'
+import ExpenseSummary from './ExpenseSummary'
+import Link from 'next/link'
+import toast, { Toaster } from 'react-hot-toast'
 
 const categories = ['Groceries', 'Transportation', 'Healthcare', 'Utility', 'Charity', 'Miscellaneous']
 
@@ -16,7 +19,6 @@ export default function ExpenseForm() {
   const limits = useSelector((state: RootState) => state.expenses.limits)
   const { expenses } = useSelector((state: RootState) => state.expenses)
 
-  // Calculate current totals by category
   const categoryTotals = getCategoryTotals(expenses)
   console.log(categoryTotals, 'categoryTotals')
 
@@ -29,7 +31,7 @@ export default function ExpenseForm() {
       return
     }
 
-    // Get the current total for the selected category
+
     const currentTotalObj = categoryTotals.find((tot) => tot.category === category)
     const currentTotal = currentTotalObj ? currentTotalObj.total : 0
     console.log(currentTotal, 'currentTotal')
@@ -37,7 +39,7 @@ export default function ExpenseForm() {
     const categoryLimit = limits[category] || Infinity
     console.log(categoryLimit, 'categoryLimit')
 
-    // Check if adding this expense exceeds the category limit
+    
     if (numAmount + currentTotal > categoryLimit) {
       alert(
         `This expense exceeds your ${category} limit of $${categoryLimit}. \n` +
@@ -55,13 +57,18 @@ export default function ExpenseForm() {
         date: new Date().toISOString(),
       })
     )
-
-    // Clear form inputs only after the expense is successfully added
+    toast.success('Expense added successfully!')
+   
     setAmount('')
     setPurpose('')
   }
 
   return (
+ <>
+ <Toaster
+  position="top-center"
+  reverseOrder={false}
+/>
     <form onSubmit={handleSubmit} className="expense-form">
       <h2>Add Expense</h2>
       <div className="form-group">
@@ -97,6 +104,10 @@ export default function ExpenseForm() {
         />
       </div>
       <button type="submit">Add Expense</button>
+    <Link href="/summary">  <button type="button">Summary</button></Link>
     </form>
+
+    
+ </>
   )
 }

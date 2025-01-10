@@ -14,7 +14,7 @@ export const getCategoryTotals = (expenses: Expense[]): CategoryTotal[] => {
     return acc
   }, {} as Record<string, number>)
 
-  // Convert to an array of { category, total }
+
   return Object.entries(totals).map(([category, total]) => ({
     category,
     total,

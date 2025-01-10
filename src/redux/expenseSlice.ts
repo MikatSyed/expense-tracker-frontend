@@ -14,10 +14,9 @@ export interface Expense {
 interface ExpenseState {
   expenses: Expense[]
   limits: Record<string, number>
-  limitResetDate: string | null 
+  limitResetDate: string | null
   status: 'idle' | 'loading' | 'succeeded' | 'failed'
   error: string | null
-  
 }
 
 // Key for local storage
@@ -36,17 +35,24 @@ const defaultLimits: Record<string, number> = {
 
 // Utility functions for local storage
 const saveLimitsToLocalStorage = (limits: Record<string, number>, resetDate: string) => {
-  localStorage.setItem(LIMITS_KEY, JSON.stringify(limits))
-  localStorage.setItem(RESET_DATE_KEY, resetDate)
+  if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+    localStorage.setItem(LIMITS_KEY, JSON.stringify(limits))
+    localStorage.setItem(RESET_DATE_KEY, resetDate)
+  }
 }
 
 const loadLimitsFromLocalStorage = (): { limits: Record<string, number>; resetDate: string | null } => {
-  const storedLimits = localStorage.getItem(LIMITS_KEY)
-  const storedDate = localStorage.getItem(RESET_DATE_KEY)
-  return {
-    limits: storedLimits ? JSON.parse(storedLimits) : { ...defaultLimits },
-    resetDate: storedDate || null,
+  if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+    const storedLimits = localStorage.getItem(LIMITS_KEY)
+    const storedDate = localStorage.getItem(RESET_DATE_KEY)
+    return {
+      limits: storedLimits ? JSON.parse(storedLimits) : { ...defaultLimits },
+      resetDate: storedDate || null,
+    }
   }
+
+  // Default values for SSR or non-browser environments
+  return { limits: { ...defaultLimits }, resetDate: null }
 }
 
 // Check if a month has passed since the last reset
@@ -72,7 +78,7 @@ export const fetchExpenses = createAsyncThunk<Expense[], void, { rejectValue: st
   'expenses/fetchExpenses',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch('http://localhost:8880/api/v1/expenses')
+      const response = await fetch('https://expense-tracker-backend-ashy.vercel.app/api/v1/expenses')
       if (!response.ok) {
         throw new Error('Failed to fetch expenses')
       }
@@ -89,7 +95,7 @@ export const addExpenseAsync = createAsyncThunk<Expense, Omit<Expense, '_id'>, {
   'expenses/addExpense',
   async (expense, { rejectWithValue, dispatch }) => {
     try {
-      const response = await fetch('http://localhost:8880/api/v1/expenses', {
+      const response = await fetch('https://expense-tracker-backend-ashy.vercel.app/api/v1/expenses', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -101,7 +107,7 @@ export const addExpenseAsync = createAsyncThunk<Expense, Omit<Expense, '_id'>, {
       }
       const data = await response.json()
 
-      // Automatically refetch expenses after adding
+      // Refresh expenses list after adding a new expense
       dispatch(fetchExpenses())
       return data
     } catch (error: any) {
